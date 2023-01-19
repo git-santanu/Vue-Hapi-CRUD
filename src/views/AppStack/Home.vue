@@ -1,6 +1,6 @@
 <template>
     <Header />
-    <h1>Hello, welcome to home page</h1>
+    <h1>Hello, {{ name }} welcome to home page</h1>
     <section>
         <table border="1">
             <th>Id:</th>
@@ -47,6 +47,10 @@ export default {
     },
     created() {
         this.showAllData();
+        const userLogin = JSON.parse(localStorage.getItem('user-login>'));
+        console.log('useLogData>>>>>>',userLogin.data.user.firstName);
+        this.name = userLogin.data.user.firstName;
+        console.log('user name>>>>',this.name)
     }
 }
 </script>

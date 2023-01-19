@@ -3,12 +3,19 @@
         <a href="/"><router-link to="/"></router-link>Home</a>
         <a href="#" v-on:click="addDetails">Add</a>
         <a href="#" v-on:click="logout">Logout</a>
+        <a href="#">Hello {{ userName }},  {{ greetUser }}</a>
     </div>
 </template>
 
 <script>
 export default {
     name: 'Header',
+    data() {
+        return {
+            userName: '',
+            greetUser: ''
+        }
+    },
     methods: {
         logout() {
             console.log('Logout clicked');
@@ -19,6 +26,20 @@ export default {
             console.log('Details added');
             this.$router.push({ name: 'AddDetails' })
         }
+    },
+    created() {
+        const userLogin = JSON.parse(localStorage.getItem('user-login>'));
+        this.userName = userLogin.data.user.firstName;
+        const dateTime = new Date();
+        const getHour = dateTime.getHours();
+        console.log(getHour)
+        if (getHour >= 12 && getHour < 16) {
+            this.greetUser = 'Good Noon';
+        } else if (getHour>= 16 && getHour < 23) {
+             this.greetUser = 'Good Night'
+        }else{
+             this.greetUser = 'Good Morning'
+        } 
     }
 }
 </script>

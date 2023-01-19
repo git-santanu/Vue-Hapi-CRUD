@@ -1,4 +1,14 @@
-import { createApp } from 'vue'
+import { createApp } from 'vue';
+import {createStore} from 'vuex'
 import App from './App.vue'
 import router from './router'
-createApp(App).use(router).mount('#app')
+
+const store = createStore({
+    state() {
+        return {
+            AuthStatus: true
+        }
+    }
+})
+
+createApp(App).use(router,store).mount('#app')

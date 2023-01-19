@@ -1,6 +1,6 @@
 <template>
     <Header />
-    <h1>Welcome to Add user page</h1>
+    <h1> Add user here</h1>
     <div class="container">
         <div class="form-group">
             <label for="name">Name: </label>
