@@ -15,7 +15,7 @@
             <input type="text" id="password" placeholder="password" v-model="password">
         </div>
         <button v-on:click="addUser">Add User</button>
-
+        
     </div>
 </template>
 

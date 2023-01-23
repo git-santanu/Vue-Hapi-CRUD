@@ -5,6 +5,7 @@ import LogIn from "../views/AuthStack/LogIn.vue";
 import AddDetails from "../views/AppStack/AddDetails.vue";
 import UpdateDetails from "../views/AppStack/UpdateDetails.vue";
 import deleteDetails from "../views/AppStack/deleteDetails.vue";
+import Upload from "../views/AppStack/Upload.vue";
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     name: "deleteDetails",
     component: deleteDetails,
     path: "/delete/:id",
+  },
+  {
+    name: "uploadImage",
+    component: Upload,
+    path: "/upload",
   },
 ];
 const router = createRouter({

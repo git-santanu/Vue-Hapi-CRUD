@@ -3,7 +3,7 @@
         <a href="/"><router-link to="/"></router-link>Home</a>
         <a href="#" v-on:click="addDetails">Add</a>
         <a href="#" v-on:click="logout">Logout</a>
-        <a href="#">Hello {{ userName }},  {{ greetUser }}</a>
+        <a href="#">Hi {{ userName }},  {{ greetUser }}</a>
     </div>
 </template>
 

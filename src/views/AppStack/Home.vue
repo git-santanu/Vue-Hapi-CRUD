@@ -7,6 +7,7 @@
             <th>Name:</th>
             <th>Email:</th>
             <th>Action</th>
+            <th>Image</th>
             <tr v-for="users in showUsers" :key="users.id">
                 <td>{{ users.id }}</td>
                 <td>{{ users.name }}</td>
@@ -14,6 +15,13 @@
                 <td>
                     <router-link :to="'/update/' + users.id">Update</router-link><br>
                     <router-link :to="'/delete/' + users.id">Delete</router-link>
+                </td>
+                <td>
+                    <div>
+                        <input type="file" @change="selectImg">
+                        <h6 v-if="showMsg">{{ showMsg }}</h6>
+                        <button v-if="!showMsg" class="btn" @click="onUpload">Upload</button>
+                    </div>
                 </td>
             </tr>
         </table>
@@ -27,7 +35,9 @@ export default {
     data() {
         return {
             showUsers: [],
-            name: ''
+            name: '',
+            selectedImg: null,
+            showMsg: ''
         }
     },
     components: {
@@ -43,14 +53,35 @@ export default {
             console.log('res>>>', result);
             this.showUsers = result.data.users;
             console.log('Comp is loaded')
+        },
+        selectImg(e) {
+            console.log(e.target.files[0]);
+            const url = URL.createObjectURL(e.target.files[0])
+            this.selectedImg = url
+        },
+        async onUpload() {
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            }
+            const data = new FormData();
+            data.append('file', this.selectedImg)
+            const imgRes = await axios.post('http://localhost:3005/api/file-upload', data, config)
+            console.log('img data', imgRes.data);
+            this.showMsg = imgRes.data.msg
         }
     },
-    created() {
-        this.showAllData();
+    mounted() {
         const userLogin = JSON.parse(localStorage.getItem('user-login>'));
-        console.log('useLogData>>>>>>',userLogin.data.user.firstName);
+        if (userLogin) {
+            this.showAllData();
+        } else {
+            this.$router.push({ name: 'LogIn' });
+        }
+        console.log('useLogData>>>>>>', userLogin.data.user.firstName);
         this.name = userLogin.data.user.firstName;
-        console.log('user name>>>>',this.name)
+        console.log('user name>>>>', this.name)
     }
 }
 </script>
