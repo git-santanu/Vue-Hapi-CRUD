@@ -1,6 +1,9 @@
 <template>
     <Header />
     <h1>Hello, {{ name }} welcome to home page</h1>
+    <h1>Vuex data is: {{ vueData }}</h1>
+    <button class="btn" @click="updateData(1)">Add</button>
+    <button class="btn" @click="updateData(-1)">Remove</button>
     <section>
         <table border="1">
             <th>Id:</th>
@@ -32,6 +35,11 @@ import axios from 'axios';
 import Header from '../../components/Header.vue';
 export default {
     name: 'Home',
+    computed:{
+     vueData(){
+        return this.$store.state.data
+     }
+    },
     data() {
         return {
             showUsers: [],
@@ -70,6 +78,9 @@ export default {
             const imgRes = await axios.post('http://localhost:3005/api/file-upload', data, config)
             console.log('img data', imgRes.data);
             this.showMsg = imgRes.data.msg
+        },
+        updateData(vueData){
+           this.$store.commit('updateData',vueData)
         }
     },
     mounted() {
@@ -96,9 +107,7 @@ export default {
     margin-top: 7px;
     background-color: aqua;
     margin-left: 10px;
-}
-
-;
+};
 
 .deltxt {
     text-align: center;
