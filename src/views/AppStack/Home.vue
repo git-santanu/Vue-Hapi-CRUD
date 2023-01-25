@@ -33,12 +33,26 @@
 <script>
 import axios from 'axios';
 import Header from '../../components/Header.vue';
+import { useStore } from 'vuex'
+import { computed } from 'vue'
 export default {
     name: 'Home',
-    computed:{
-     vueData(){
-        return this.$store.state.data
-     }
+    computed: {
+        //------ vuex data handling with Option API-------
+        //  vueData(){
+        //     return this.$store.state.data
+        //  }
+    },
+    //------ vuex data handling with Composition API-------
+    setup() {
+        const store = useStore();
+        // console.log('userdata>', store.state.user);
+        // store.commit('setUser', 'Loris')
+        return {
+            vueData: computed(() => store.state.data),
+            updateData: vueData => { store.commit('updateData', vueData) },
+            user: computed(()=>store.state.user)
+        }
     },
     data() {
         return {
@@ -53,10 +67,10 @@ export default {
     },
     methods: {
         async showAllData() {
-            const user = localStorage.getItem('user-add');
-            if (!user) {
-                this.$router.push({ name: 'Home' });
-            }
+            // const user = localStorage.getItem('user-add');
+            // if (!user) {
+            //     this.$router.push({ name: 'Home' });
+            // }
             const result = await axios.get('http://localhost:3005/api/show-all-details');
             console.log('res>>>', result);
             this.showUsers = result.data.users;
@@ -79,20 +93,27 @@ export default {
             console.log('img data', imgRes.data);
             this.showMsg = imgRes.data.msg
         },
-        updateData(vueData){
-           this.$store.commit('updateData',vueData)
-        }
+        //------ vuex data handling with Option API-------
+        // updateData(vueData){
+        //    this.$store.commit('updateData',vueData)
+        // }
     },
     mounted() {
+        this.showAllData();
         const userLogin = JSON.parse(localStorage.getItem('user-login>'));
+        console.log('logData>>>',userLogin)
         if (userLogin) {
-            this.showAllData();
-        } else {
-            this.$router.push({ name: 'LogIn' });
-        }
-        console.log('useLogData>>>>>>', userLogin.data.user.firstName);
-        this.name = userLogin.data.user.firstName;
-        console.log('user name>>>>', this.name)
+            console.log('useLogData>>>>>>', userLogin.data.user.firstName);
+            this.name = userLogin.data.user.firstName;
+            console.log('username>>>>', this.name)
+        } 
+        const userSignUp = JSON.parse(localStorage.getItem('user-register>'));
+        if (userSignUp) {
+            console.log('useRegData>>>>>>', userSignUp.data.firstName);
+            this.name = userSignUp.data.firstName;
+            console.log('user name>>>>', this.name)
+        } 
+
     }
 }
 </script>
@@ -107,7 +128,9 @@ export default {
     margin-top: 7px;
     background-color: aqua;
     margin-left: 10px;
-};
+}
+
+;
 
 .deltxt {
     text-align: center;

@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import store from '@/store';
 export default {
     name: 'SignUp',
     data() {
@@ -45,32 +45,31 @@ export default {
     },
     methods: {
         async signUp() {
-            const result = await axios.post('http://localhost:5000/api/user-registration', {
-                firstName: this.firstName,
-                lastName: this.lastName,
-                email: this.email,
-                password: this.password,
-                mobile_number: this.mobile_number
-            })
-            console.warn('result>>>', result);
-            if (result.data.statusCode == 200) {
-                console.warn('item>>', JSON.stringify(result.data))
-                localStorage.setItem('user-register>', JSON.stringify(result.data))
+            try {
+                await store.dispatch('signup', {
+                    firstName: this.firstName,
+                    lastName: this.lastName,
+                    email: this.email,
+                    password: this.password,
+                    mobile_number: this.mobile_number
+                });
                 this.$router.push({ name: 'Home' })
+            } catch (error) {
+                console.log(error)
             }
-            console.warn('Sign up', this.firstName, this.lastName, this.email, this.password, this.mobile_number)
         }
     },
     mounted() {
         const user = localStorage.getItem('user-register>');
         const logUser = localStorage.getItem('user-login>')
-        console.log('logdta>>>>',logUser)
+        console.log('logdta>>>>', logUser)
+        console.log('logdta>>>>', user)
         if (!user) {
             this.$router.push({ name: 'SignUp' })
-        }else if(!logUser){
-            this.$router.push({name: 'SignUp'})
-        }else{
-            this.$router.push({name: 'Home'})
+        } else if (!logUser) {
+            this.$router.push({ name: 'SignUp' })
+        } else {
+            this.$router.push({ name: 'Home' })
         }
     }
 }
@@ -112,6 +111,7 @@ section {
     border: 1px solid rgba(128, 128, 128, 0.199);
     margin-top: 5px;
 }
+
 button {
     width: 100%;
     border: none;
@@ -122,5 +122,4 @@ button {
     margin-top: 10px;
     background-color: aqua;
 }
-
 </style>

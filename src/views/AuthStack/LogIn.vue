@@ -17,7 +17,7 @@
     </section>
 </template>
 <script>
-import axios from 'axios'
+import store from '@/store';
 export default {
     name: 'LogIn',
     data() {
@@ -29,27 +29,18 @@ export default {
     methods: {
         async login() {
             console.warn('Login info>>', this.email, this.password);
-            const result = await axios.post('http://localhost:5000/api/user-login', {
-                email: this.email,
-                password: this.password
-            });
-            console.warn('Login info>>>', result);
-            if (result.data.statusCode===200) {
+            try {
+                await store.dispatch('login', {
+                    email: this.email,
+                    password: this.password
+                });
                 alert('Login successfully');
-                this.$router.push({ name: 'Home' });
-                localStorage.setItem('user-login>', JSON.stringify(result.data))
-            } else if (result.data.statusCode === 400) {
-                this.$router.push({ name: 'SignUp' })
-            } else {
-                alert('internal error: 500')
+                this.$router.push({ name: 'Home' })
+            } catch (error) {
+                console.log(error)
             }
         }
-    },
-    created() {
-        const user = localStorage.getItem('user-login>');
-        if (user) {
-            this.$router.push({ name: 'Home' })
-        }
     }
+
 }
 </script>

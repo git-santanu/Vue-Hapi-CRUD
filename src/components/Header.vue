@@ -3,7 +3,7 @@
         <a href="/"><router-link to="/"></router-link>Home</a>
         <a href="#" v-on:click="addDetails">Add</a>
         <a href="#" v-on:click="logout">Logout</a>
-        <a href="#">Hi {{ userName }},  {{ greetUser }}</a>
+        <a href="#">Hi {{ userName }}, {{ greetUser }}</a>
     </div>
 </template>
 
@@ -27,19 +27,37 @@ export default {
             this.$router.push({ name: 'AddDetails' })
         }
     },
-    created() {
+    mounted() {
         const userLogin = JSON.parse(localStorage.getItem('user-login>'));
-        this.userName = userLogin.data.user.firstName;
-        const dateTime = new Date();
-        const getHour = dateTime.getHours();
-        console.log(getHour)
-        if (getHour >= 12 && getHour < 16) {
-            this.greetUser = 'Good Noon';
-        } else if (getHour>= 16 && getHour < 23) {
-             this.greetUser = 'Good Night'
-        }else{
-             this.greetUser = 'Good Morning'
-        } 
+        const userSignUp = JSON.parse(localStorage.getItem('user-register>'));
+        // console.log("userSignUp>>>",userSignUp.data)
+        if (userLogin) {
+            this.userName = userLogin.data.user.firstName;
+            const dateTime = new Date();
+            const getHour = dateTime.getHours();
+            console.log(getHour)
+            if (getHour >= 12 && getHour < 16) {
+                this.greetUser = 'Good Noon';
+            } else if (getHour >= 16 && getHour < 23) {
+                this.greetUser = 'Good Night'
+            } else {
+                this.greetUser = 'Good Morning'
+            }
+        }
+        if (userSignUp) {
+            this.userName = userSignUp.data.firstName;
+            const dateTime = new Date();
+            const getHour = dateTime.getHours();
+            console.log(getHour)
+            if (getHour >= 12 && getHour < 16) {
+                this.greetUser = 'Good Noon';
+            } else if (getHour >= 16 && getHour < 23) {
+                this.greetUser = 'Good Night'
+            } else {
+                this.greetUser = 'Good Morning'
+            }
+        }
+
     }
 }
 </script>
